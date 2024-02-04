@@ -33,6 +33,30 @@ export default {
       boxShadow: {
         card: "0px 2px 8px 0px rgba(0, 0, 0, 0.06)",
       },
+      keyframes: {
+        slideLeftToRight: {
+          from: {
+            transform: "translateX(0)",
+          },
+          to: {
+            transform: "translateX(100%)",
+          },
+        },
+        fadeInDown: {
+          from: {
+            opacity: 0,
+            transform: "translateY(-20%)",
+          },
+          to: {
+            opacity: 1,
+            transform: "translateY(0)",
+          },
+        },
+      },
+      animation: {
+        slideLeftToRight: "slideLeftToRight 300ms ease-out",
+        fadeInDown: "fadeInDown 300ms both",
+      },
     },
   },
   plugins: [],

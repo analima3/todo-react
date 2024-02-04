@@ -5,7 +5,7 @@ export function EmptyList({ isEmpty }: { isEmpty: boolean }) {
   return (
     <div
       className={twMerge(
-        "flex flex-col items-center gap-4 py-8 md:py-16",
+        "animate-fadeInDown flex flex-col items-center gap-4 py-8 md:py-16",
         isEmpty && "border-t border-solid border-gray-400 rounded-lg"
       )}
     >
