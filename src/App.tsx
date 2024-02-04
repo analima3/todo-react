@@ -14,7 +14,7 @@ export default function App() {
     data,
     newTask,
     handleInputChange,
-    handleSelectedTask,
+    handleStatusTask,
     handleDeleteTask,
     handleNewTask,
   } = useData();
@@ -66,8 +66,8 @@ export default function App() {
                 <Card
                   key={task.id}
                   description={task.description}
-                  isChecked={task.isChecked}
-                  handleChangeCheckbox={() => handleSelectedTask(task)}
+                  isChecked={task.isCompleted}
+                  handleChangeCheckbox={() => handleStatusTask(task)}
                   handleClickButton={() => handleDeleteTask(task)}
                 />
               ))}

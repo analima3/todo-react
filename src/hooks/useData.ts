@@ -17,19 +17,21 @@ export const useData = () => {
   const [data, setData] = useState<Data>(initialValues);
   const [newTask, setNewTask] = useState<string>("");
 
-  function handleInputChange(evt: ChangeEvent<HTMLInputElement>) {
+  const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setNewTask(evt.target.value);
-  }
+  };
+
+  const createRandomId = () => Math.round(Math.random() * 1000);
 
   function handleNewTask(description: string) {
     if (newTask.trim() !== "") {
-      const newTask = {
-        id: Math.round(Math.random() * 1000),
+      const newTask: Task = {
+        id: createRandomId(),
         description,
-        isChecked: false,
+        isCompleted: false,
       };
 
-      setData(({ tasks, completedTasks, createdTasks }) => ({
+      setData(({ tasks, createdTasks, completedTasks }) => ({
         tasks: [newTask, ...tasks],
         createdTasks: createdTasks + 1,
         completedTasks: completedTasks,
@@ -39,21 +41,23 @@ export const useData = () => {
     }
   }
 
-  function handleSelectedTask(task: Task) {
+  function handleStatusTask(task: Task) {
     if (task) {
-      const tasksHaveCheged = handleCheckedStateTask(task);
+      const tasksAfterChangeStatus = handleCheckedStateTask(task);
 
       setData(({ createdTasks }) => ({
-        tasks: tasksHaveCheged,
+        tasks: tasksAfterChangeStatus,
         createdTasks: createdTasks,
-        completedTasks: tasksHaveCheged.filter((task) => task.isChecked).length,
+        completedTasks: tasksAfterChangeStatus.filter(
+          (task) => task.isCompleted
+        ).length,
       }));
     }
   }
 
   function handleCheckedStateTask(selectedTask: Task): Task[] {
-    if (selectedTask.isChecked) {
-      const newPos = data.tasks.findIndex((task) => task.isChecked);
+    if (selectedTask.isCompleted) {
+      const newPos = data.tasks.findIndex((task) => task.isCompleted);
       const currentPos = data.tasks.findIndex(
         (task) => task.id === selectedTask.id
       );
@@ -67,7 +71,7 @@ export const useData = () => {
       (task) => task.id !== selectedTask.id
     );
 
-    return [...newOrderedTasks, { ...selectedTask, isChecked: true }];
+    return [...newOrderedTasks, { ...selectedTask, isCompleted: true }];
   }
 
   function changePositionTask(newPos: number, currentPos: number) {
@@ -75,7 +79,7 @@ export const useData = () => {
 
     [newTasksOrderTasks[currentPos], newTasksOrderTasks[newPos]] = [
       newTasksOrderTasks[newPos],
-      { ...newTasksOrderTasks[currentPos], isChecked: false },
+      { ...newTasksOrderTasks[currentPos], isCompleted: false },
     ];
 
     return [...newTasksOrderTasks];
@@ -90,7 +94,7 @@ export const useData = () => {
       return {
         tasks: tasksAfterDelete,
         createdTasks: tasksAfterDelete.length,
-        completedTasks: tasksAfterDelete.filter((task) => task.isChecked)
+        completedTasks: tasksAfterDelete.filter((task) => task.isCompleted)
           .length,
       };
     });
@@ -101,7 +105,7 @@ export const useData = () => {
     newTask,
     handleInputChange,
     handleNewTask,
-    handleSelectedTask,
+    handleStatusTask,
     handleDeleteTask,
   };
 };
