@@ -22,7 +22,7 @@ export const useData = () => {
   };
 
   function handleNewTask(description: string) {
-    if (newTask.trim() !== "") {
+    if (description.trim() !== "") {
       const newTask: Task = {
         id: Date.now(),
         description,
@@ -39,32 +39,27 @@ export const useData = () => {
     }
   }
 
-  function handleStatusTask(task: Task) {
-    if (task) {
-      const tasksAfterChangeStatus = handleCheckedStateTask(task);
+  function handleStatusTask(selectedTask: Task) {
+    if (selectedTask) {
+      const updatedTasks = !selectedTask.isCompleted
+        ? handleCompletedTask(selectedTask)
+        : handleUncompletedTask(selectedTask);
 
-      setData(({ createdTasks }) => ({
-        tasks: tasksAfterChangeStatus,
-        createdTasks: createdTasks,
-        completedTasks: tasksAfterChangeStatus.filter(
+      setData(({ createdTasks }) => {
+        const completedTasks = updatedTasks.filter(
           (task) => task.isCompleted
-        ).length,
-      }));
+        ).length;
+
+        return {
+          tasks: updatedTasks,
+          createdTasks: createdTasks,
+          completedTasks,
+        };
+      });
     }
   }
 
-  function handleCheckedStateTask(selectedTask: Task): Task[] {
-    if (selectedTask.isCompleted) {
-      const newPos = data.tasks.findIndex((task) => task.isCompleted);
-      const currentPos = data.tasks.findIndex(
-        (task) => task.id === selectedTask.id
-      );
-
-      if (newPos !== -1 && currentPos !== -1) {
-        return changePositionTask(newPos, currentPos);
-      }
-    }
-
+  function handleCompletedTask(selectedTask: Task): Task[] {
     const newOrderedTasks = data.tasks.filter(
       (task) => task.id !== selectedTask.id
     );
@@ -72,28 +67,40 @@ export const useData = () => {
     return [...newOrderedTasks, { ...selectedTask, isCompleted: true }];
   }
 
-  function changePositionTask(newPos: number, currentPos: number) {
-    const newTasksOrderTasks = [...data.tasks];
+  function handleUncompletedTask(selectedTask: Task): Task[] {
+    const newPos = data.tasks.findIndex((task) => task.isCompleted);
+    const currentPos = data.tasks.findIndex(
+      (task) => task.id === selectedTask.id
+    );
 
-    [newTasksOrderTasks[currentPos], newTasksOrderTasks[newPos]] = [
-      newTasksOrderTasks[newPos],
-      { ...newTasksOrderTasks[currentPos], isCompleted: false },
-    ];
+    if (newPos !== -1 && currentPos !== -1) {
+      const newTasksOrderTasks = [...data.tasks];
 
-    return [...newTasksOrderTasks];
+      [newTasksOrderTasks[currentPos], newTasksOrderTasks[newPos]] = [
+        newTasksOrderTasks[newPos],
+        { ...newTasksOrderTasks[currentPos], isCompleted: false },
+      ];
+
+      return [...newTasksOrderTasks];
+    }
+
+    return data.tasks;
   }
 
   function handleDeleteTask(selectedTask: Task) {
-    setData(({ tasks }) => {
-      const tasksAfterDelete = tasks.filter(
-        (task) => task.id !== selectedTask.id
-      );
+    const tasksAfterDelete = data.tasks.filter(
+      (task) => task.id !== selectedTask.id
+    );
+
+    setData(() => {
+      const completedTasks = tasksAfterDelete.filter(
+        (task) => task.isCompleted
+      ).length;
 
       return {
         tasks: tasksAfterDelete,
         createdTasks: tasksAfterDelete.length,
-        completedTasks: tasksAfterDelete.filter((task) => task.isCompleted)
-          .length,
+        completedTasks,
       };
     });
   }
