@@ -73,15 +73,16 @@ export const useData = () => {
   }
 
   function handleDeleteTask(selectedTask: Task) {
-    setData(({ tasks, createdTasks, completedTasks }) => {
+    setData(({ tasks }) => {
       const tasksAfterDelete = tasks.filter(
         (task) => task.id !== selectedTask.id
       );
 
       return {
         tasks: tasksAfterDelete,
-        createdTasks,
-        completedTasks,
+        createdTasks: tasksAfterDelete.length,
+        completedTasks: tasksAfterDelete.filter((task) => task.isChecked)
+          .length,
       };
     });
   }
