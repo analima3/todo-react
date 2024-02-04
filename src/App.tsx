@@ -66,7 +66,7 @@ export default function App() {
                 <Card
                   key={task.id}
                   description={task.description}
-                  isChecked={task.isCompleted}
+                  isCompleted={task.isCompleted}
                   handleChangeCheckbox={() => handleStatusTask(task)}
                   handleClickButton={() => handleDeleteTask(task)}
                 />

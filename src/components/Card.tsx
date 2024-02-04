@@ -6,14 +6,14 @@ import { twMerge } from "tailwind-merge";
 
 interface CardProps extends ComponentProps<"li"> {
   description: string;
-  isChecked: boolean;
+  isCompleted: boolean;
   handleChangeCheckbox: () => void;
   handleClickButton: () => void;
 }
 
 export function Card({
   description,
-  isChecked,
+  isCompleted,
   handleChangeCheckbox,
   handleClickButton,
   ...rest
@@ -38,11 +38,11 @@ export function Card({
       ref={itemListRef}
       {...rest}
     >
-      <Checkbox checked={isChecked} onChange={handleChangeCheckbox}>
+      <Checkbox checked={isCompleted} onChange={handleChangeCheckbox}>
         <p
           className={twMerge(
             "text-gray-100 text-sm",
-            isChecked && "line-through text-gray-300"
+            isCompleted && "line-through text-gray-300"
           )}
         >
           {description}
