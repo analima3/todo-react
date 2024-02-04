@@ -1,12 +1,19 @@
 import { ComponentProps } from "react";
 import { CheckboxSVG } from "./icons/Checkbox";
 
-interface CheckboxProps extends ComponentProps<"input"> {}
+interface CheckboxProps extends ComponentProps<"input"> {
+  onChange(): void;
+}
 
-export function Checkbox({ checked, children }: CheckboxProps) {
+export function Checkbox({ checked, children, onChange }: CheckboxProps) {
   return (
     <label className="w-full flex items-center gap-3 cursor-pointer select-none">
-      <input type="checkbox" className="hidden" checked={checked} />
+      <input
+        type="checkbox"
+        className="hidden"
+        checked={checked}
+        onChange={onChange}
+      />
 
       {checked ? (
         <CheckboxSVG.CheckboxChecked className="hover:brightness-125" />
