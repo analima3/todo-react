@@ -24,7 +24,7 @@ export default {
       },
       gridTemplateColumns: {
         form: "1fr 80px",
-        card: "26px 1fr 36px",
+        card: "1fr 36px",
       },
       transitionProperty: {
         "ring-brightness": "box-shadow, -webkit-box-shadow, brightness",
