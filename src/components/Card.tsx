@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import { TrashSVG } from "./icons/Trash";
 import { twMerge } from "tailwind-merge";
 
-interface CardProps extends ComponentProps<"div"> {
+interface CardProps extends ComponentProps<"li"> {
   description: string;
   isChecked: boolean;
   handleChangeCheckbox: () => void;
@@ -19,7 +19,7 @@ export function Card({
   ...rest
 }: CardProps) {
   return (
-    <div
+    <li
       className="grid grid-cols-card items-start gap-3 w-full p-4 bg-gray-500 rounded-lg border border-gray-400 shadow-card"
       {...rest}
     >
@@ -37,6 +37,6 @@ export function Card({
       <Button onClick={handleClickButton} iconButton>
         <TrashSVG className="hover:text-danger" />
       </Button>
-    </div>
+    </li>
   );
 }

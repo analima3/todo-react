@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Task } from "../global";
 
 interface Data {
@@ -15,19 +15,28 @@ const initialValues = {
 
 export const useData = () => {
   const [data, setData] = useState<Data>(initialValues);
+  const [newTask, setNewTask] = useState<string>("");
 
-  function addNewTask(description: string) {
-    const newTask = {
-      id: Math.round(Math.random() * 1000),
-      description,
-      isChecked: false,
-    };
+  function handleInputChange(evt: ChangeEvent<HTMLInputElement>) {
+    setNewTask(evt.target.value);
+  }
 
-    setData(({ tasks, completedTasks, createdTasks }) => ({
-      tasks: [newTask, ...tasks],
-      createdTasks: createdTasks + 1,
-      completedTasks: completedTasks,
-    }));
+  function handleNewTask(description: string) {
+    if (newTask.trim() !== "") {
+      const newTask = {
+        id: Math.round(Math.random() * 1000),
+        description,
+        isChecked: false,
+      };
+
+      setData(({ tasks, completedTasks, createdTasks }) => ({
+        tasks: [newTask, ...tasks],
+        createdTasks: createdTasks + 1,
+        completedTasks: completedTasks,
+      }));
+
+      setNewTask("");
+    }
   }
 
   function handleSelectedTask(task: Task) {
@@ -87,5 +96,12 @@ export const useData = () => {
     });
   }
 
-  return { data, addNewTask, handleSelectedTask, handleDeleteTask };
+  return {
+    data,
+    newTask,
+    handleInputChange,
+    handleNewTask,
+    handleSelectedTask,
+    handleDeleteTask,
+  };
 };

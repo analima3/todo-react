@@ -7,7 +7,7 @@ interface CheckboxProps extends ComponentProps<"input"> {
 
 export function Checkbox({ checked, children, onChange }: CheckboxProps) {
   return (
-    <label className="w-full flex items-center gap-3 cursor-pointer select-none">
+    <label className="w-min flex items-center gap-3 cursor-pointer select-none">
       <input
         type="checkbox"
         className="hidden"
