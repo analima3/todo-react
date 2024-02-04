@@ -21,12 +21,10 @@ export const useData = () => {
     setNewTask(evt.target.value);
   };
 
-  const createRandomId = () => Math.round(Math.random() * 1000);
-
   function handleNewTask(description: string) {
     if (newTask.trim() !== "") {
       const newTask: Task = {
-        id: createRandomId(),
+        id: Date.now(),
         description,
         isCompleted: false,
       };
